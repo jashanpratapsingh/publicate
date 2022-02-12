@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import { I18n } from "react-i18next";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import {
   FeedInfo,
   generateSummaryFromHTML,
@@ -24,7 +24,7 @@ interface CurrentFeed {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
   username: string;
 }
@@ -50,13 +50,13 @@ export default class profile extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    checkNetworkId(this.props.ribbit, this.props.networkId);
+    checkNetworkId(this.props.publicate, this.props.networkId);
     this.initializeUser(this.props.username);
     this.bindWindowScrollEvent();
   }
 
   componentWillReceiveProps(newProps: Props) {
-    checkNetworkId(newProps.ribbit, newProps.networkId);
+    checkNetworkId(newProps.publicate, newProps.networkId);
     if (newProps.username !== this.props.username) {
       this.initializeUser(newProps.username);
       this.bindWindowScrollEvent();
@@ -64,10 +64,10 @@ export default class profile extends React.Component<Props, State> {
   }
 
   async initializeUser(username: string) {
-    const ribbit = this.props.ribbit;
-    const userInfo = await this.props.ribbit.getUserInfoFromUsername(username);
+    const publicate = this.props.publicate;
+    const userInfo = await this.props.publicate.getUserInfoFromUsername(username);
     const blockNumber = parseInt(
-      await ribbit.contractInstance.methods
+      await publicate.contractInstance.methods
         .getCurrentFeedInfo(userInfo.address)
         .call()
     );
@@ -91,7 +91,7 @@ export default class profile extends React.Component<Props, State> {
   async showUserFeeds() {
     const userInfo = this.state.userInfo;
     const userAddress = userInfo.address;
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (!this.currentFeed || !this.currentFeed.blockNumber) {
       return this.setState({
         loading: false,
@@ -106,7 +106,7 @@ export default class profile extends React.Component<Props, State> {
         loading: true
       },
       async () => {
-        const transactionInfo = await ribbit.getTransactionInfo(
+        const transactionInfo = await publicate.getTransactionInfo(
           {
             userAddress,
             maxCreation: this.currentFeed.creation,
@@ -154,7 +154,7 @@ export default class profile extends React.Component<Props, State> {
           };
 
           const feedInfo = await generateFeedInfoFromTransactionInfo(
-            ribbit,
+            publicate,
             transactionInfo
           );
           const feeds = this.state.feeds;
@@ -213,18 +213,18 @@ export default class profile extends React.Component<Props, State> {
       <I18n>
         {(t, { i18n }) => (
           <div className="profile-page">
-            <Header ribbit={this.props.ribbit} />
+            <Header publicate={this.props.publicate} />
             <div className="container">
               <ProfileCard
                 userInfo={this.state.userInfo}
-                ribbit={this.props.ribbit}
+                publicate={this.props.publicate}
               />
               <div className="cards">
                 {this.state.feeds.map((feedInfo, index) => (
                   <FeedCard
                     key={index}
                     feedInfo={feedInfo}
-                    ribbit={this.props.ribbit}
+                    publicate={this.props.publicate}
                   />
                 ))}
                 <p id="feed-footer">

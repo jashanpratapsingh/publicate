@@ -3,7 +3,7 @@ import * as React from "react";
 import ArticleCard from "../components/article-card";
 import Header from "../components/header";
 
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import { checkNetworkId } from "../lib/utility";
 import { TransactionInfo } from "../lib/transaction";
 import hashHistory from "../lib/history";
@@ -15,7 +15,7 @@ import {
 import { renderMarkdown } from "../lib/markdown";
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
   transactionHash: string;
 }
@@ -36,11 +36,11 @@ export default class Tx extends React.Component<Props, State> {
 
   componentDidMount() {
     document.body.scrollTop = 0;
-    checkNetworkId(this.props.ribbit, this.props.networkId);
+    checkNetworkId(this.props.publicate, this.props.networkId);
     this.analyzeTransaction(
       this.props.transactionHash,
       this.props.networkId,
-      this.props.ribbit
+      this.props.publicate
     );
   }
 
@@ -50,11 +50,11 @@ export default class Tx extends React.Component<Props, State> {
       newProps.networkId !== this.props.networkId
     ) {
       document.body.scrollTop = 0;
-      checkNetworkId(newProps.ribbit, newProps.networkId);
+      checkNetworkId(newProps.publicate, newProps.networkId);
       this.analyzeTransaction(
         newProps.transactionHash,
         newProps.networkId,
-        newProps.ribbit
+        newProps.publicate
       );
     }
   }
@@ -62,11 +62,11 @@ export default class Tx extends React.Component<Props, State> {
   async analyzeTransaction(
     transactionHash: string,
     networkId: number,
-    ribbit: Ribbit
+    publicate: Publicate
   ) {
     try {
-      const transaction = await ribbit.web3.eth.getTransaction(transactionHash);
-      const decodedInputData = ribbit.decodeMethod(transaction.input);
+      const transaction = await publicate.web3.eth.getTransaction(transactionHash);
+      const decodedInputData = publicate.decodeMethod(transaction.input);
       if (!decodedInputData || Object.keys(decodedInputData).length === 0) {
         this.setState({
           msg: `Invalid transaction ${transactionHash}`
@@ -77,7 +77,7 @@ export default class Tx extends React.Component<Props, State> {
         }) as TransactionInfo;
         try {
           const feedInfo = await generateFeedInfoFromTransactionInfo(
-            ribbit,
+            publicate,
             transactionInfo
           );
           if (feedInfo) {
@@ -102,7 +102,7 @@ export default class Tx extends React.Component<Props, State> {
     if (!this.state.feedInfo) {
       return (
         <div className="tx-page">
-          <Header ribbit={this.props.ribbit} />
+          <Header publicate={this.props.publicate} />
           <div className="container">
             <p id="feed-footer">{this.state.msg}</p>
           </div>
@@ -111,10 +111,10 @@ export default class Tx extends React.Component<Props, State> {
     }
     return (
       <div className="tx-page">
-        <Header ribbit={this.props.ribbit} showBackBtn={true} />
+        <Header publicate={this.props.publicate} showBackBtn={true} />
         <div className="container">
           <ArticleCard
-            ribbit={this.props.ribbit}
+            publicate={this.props.publicate}
             feedInfo={this.state.feedInfo}
           />
         </div>

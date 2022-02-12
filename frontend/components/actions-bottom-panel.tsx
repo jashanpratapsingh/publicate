@@ -5,12 +5,12 @@ import DonatePanel from "../components/donate-panel";
 import SharePanel from "../components/share-panel";
 
 import { FeedInfo } from "../lib/feed";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import i18n from "../i18n/i18n";
 
 interface Props {
   feedInfo: FeedInfo;
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 interface State {
   showEditPanel: boolean;
@@ -34,7 +34,7 @@ export default class ActionsBottomPanel extends React.Component<Props, State> {
   upvote = event => {
     event.preventDefault();
     event.stopPropagation();
-    this.props.ribbit
+    this.props.publicate
       .upvote(this.props.feedInfo.transactionInfo.hash)
       .then(hash => {
         // do nothing.
@@ -81,7 +81,7 @@ export default class ActionsBottomPanel extends React.Component<Props, State> {
   downvote = event => {
     event.preventDefault();
     event.stopPropagation();
-    this.props.ribbit
+    this.props.publicate
       .downvote(this.props.feedInfo.transactionInfo.hash)
       .then(hash => {
         // do nothing
@@ -138,7 +138,7 @@ export default class ActionsBottomPanel extends React.Component<Props, State> {
           cancel={() => {
             this.setState({ showEditPanel: false });
           }}
-          ribbit={this.props.ribbit}
+          publicate={this.props.publicate}
           parentFeedInfo={this.props.feedInfo} // <= TODO: for reply, this parentFeedInfo is wrong.
         />
       );
@@ -184,13 +184,13 @@ export default class ActionsBottomPanel extends React.Component<Props, State> {
           <DonatePanel
             close={() => this.setState({ showDonatePanel: false })}
             feedInfo={this.props.feedInfo}
-            ribbit={this.props.ribbit}
+            publicate={this.props.publicate}
           />
         ) : null}
         {this.state.showSharePanel ? (
           <SharePanel
             close={() => this.setState({ showSharePanel: false })}
-            networkId={this.props.ribbit.networkId}
+            networkId={this.props.publicate.networkId}
             transactionHash={this.props.feedInfo.transactionInfo.hash}
           />
         ) : null}

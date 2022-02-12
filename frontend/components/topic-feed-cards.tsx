@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import { FeedInfo, generateFeedInfoFromTransactionInfo } from "../lib/feed";
 import FeedCard from "../components/feed-card";
 import { I18n } from "react-i18next";
@@ -16,7 +16,7 @@ enum TopicSorting {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   topic: string;
   areReplies?: boolean;
 }
@@ -65,11 +65,11 @@ export default class TopicFeedCards extends React.Component<Props, State> {
   }
 
   async showTopic(topic: string) {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     let blockNumber;
     blockNumber = parseInt(
-      await ribbit.contractInstance.methods
-        .getCurrentTagInfoByTrend(ribbit.formatTag(topic))
+      await publicate.contractInstance.methods
+        .getCurrentTagInfoByTrend(publicate.formatTag(topic))
         .call()
     );
 
@@ -91,7 +91,7 @@ export default class TopicFeedCards extends React.Component<Props, State> {
 
   async showTopicFeeds() {
     const topic = this.props.topic;
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (!this.currentFeed || !this.currentFeed.blockNumber) {
       return this.setState({
         loading: false,
@@ -106,8 +106,8 @@ export default class TopicFeedCards extends React.Component<Props, State> {
         loading: true
       },
       async () => {
-        const formattedTag = ribbit.formatTag(topic);
-        const transactionInfo = await ribbit.getTransactionInfo(
+        const formattedTag = publicate.formatTag(topic);
+        const transactionInfo = await publicate.getTransactionInfo(
           {
             tag: formattedTag,
             maxCreation: this.currentFeed.creation,
@@ -157,7 +157,7 @@ export default class TopicFeedCards extends React.Component<Props, State> {
           };
 
           const feedInfo = await generateFeedInfoFromTransactionInfo(
-            ribbit,
+            publicate,
             transactionInfo
           );
 
@@ -240,7 +240,7 @@ export default class TopicFeedCards extends React.Component<Props, State> {
                 <FeedCard
                   key={index}
                   feedInfo={feedInfo}
-                  ribbit={this.props.ribbit}
+                  publicate={this.props.publicate}
                   hideParent={this.props.areReplies}
                 />
               ))}

@@ -1,7 +1,7 @@
 import * as Autolinker from "autolinker";
 import * as validator from "validator";
 import * as LZString from "lz-string";
-import { Ribbit } from "./ribbit";
+import { Publicate } from "./publicate";
 import hashHistory from "./history";
 import i18n from "../i18n/i18n";
 
@@ -91,25 +91,25 @@ export function formatDate(dateString) {
 
 // check whether a user is registered or not.
 // if not, jump to the signup page.
-export async function checkUserRegistration(ribbit: Ribbit) {
-  const username = await ribbit.getUsernameFromAddress(ribbit.accountAddress);
+export async function checkUserRegistration(publicate: Publicate) {
+  const username = await publicate.getUsernameFromAddress(publicate.accountAddress);
   if (!username || !username.length) {
-    hashHistory.replace(`/${ribbit.networkId}/signup`);
+    hashHistory.replace(`/${publicate.networkId}/signup`);
   }
 }
 
-export function checkNetworkId(ribbit: Ribbit, networkId: number) {
-  console.log(ribbit.networkId, networkId);
+export function checkNetworkId(publicate: Publicate, networkId: number) {
+  console.log(publicate.networkId, networkId);
   console.log(
-    ribbit.getNetworkName(ribbit.networkId),
-    ribbit.getNetworkName(networkId)
+    publicate.getNetworkName(publicate.networkId),
+    publicate.getNetworkName(networkId)
   );
-  if (ribbit.networkId !== networkId) {
+  if (publicate.networkId !== networkId) {
     new window["Noty"]({
       type: "success",
       text: i18n.t("notification/wrong-networkId", {
-        given: ribbit.getNetworkName(ribbit.networkId),
-        required: ribbit.getNetworkName(networkId)
+        given: publicate.getNetworkName(publicate.networkId),
+        required: publicate.getNetworkName(networkId)
       }),
       timeout: 10000
     }).show();

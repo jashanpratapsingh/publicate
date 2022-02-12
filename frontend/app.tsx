@@ -4,7 +4,7 @@ import { Router, Route, Switch } from "react-router";
 import { I18nextProvider } from "react-i18next";
 const Web3 = require("web3");
 import hashHistory from "./lib/history";
-import { Ribbit } from "./lib/ribbit";
+import { Publicate } from "./lib/publicate";
 
 window["hashHistory"] = hashHistory;
 
@@ -26,26 +26,26 @@ import i18n from "./i18n/i18n";
 interface Props {}
 interface State {
   injectWeb3: boolean;
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 class App extends React.Component<Props, State> {
   state = {
     injectWeb3: false,
-    ribbit: null
+    publicate: null
   };
 
   componentDidMount() {
-    this.initializeRibbit();
+    this.initializePublicate();
   }
 
-  async initializeRibbit() {
+  async initializePublicate() {
     let web3 = null;
     if (typeof window["web3"] === "undefined") {
       console.log("metamask not installed.");
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     } else {
       console.log("metamask installed.");
-    
+
       if (typeof window["ethereum"] !== "undefined") {
         web3 = new Web3(window["ethereum"]);
         try {
@@ -58,24 +58,24 @@ class App extends React.Component<Props, State> {
         web3 = new Web3(window["web3"].currentProvider);
       }
     }
-    const ribbit = new Ribbit(web3);
+    const publicate = new Publicate(web3);
     window["web3"] = web3; // override metamask web3.
-    window["ribbit"] = ribbit;
-    
+    window["publicate"] = publicate;
+
     console.log("start initializing user.");
     try {
-      await ribbit.initialize();
-      console.log("user initialized.", ribbit.accountAddress);
-      console.log("user language: ", ribbit.settings.language);
-      i18n.changeLanguage(ribbit.settings.language || "en");
+      await publicate.initialize();
+      console.log("user initialized.", publicate.accountAddress);
+      console.log("user language: ", publicate.settings.language);
+      i18n.changeLanguage(publicate.settings.language || "en");
       this.setState(
         {
           injectWeb3: true,
-          ribbit
+          publicate
         },
         async () => {
           if (hashHistory.location.pathname === "/") {
-            hashHistory.replace(`/${ribbit.networkId}/`);
+            hashHistory.replace(`/${publicate.networkId}/`);
           }
         }
       );
@@ -86,16 +86,16 @@ class App extends React.Component<Props, State> {
         text: i18n.t("notification/init-error"),
         timeout: 10000
       }).show();
-      this.setState({ ribbit: null }, () => {
+      this.setState({ publicate: null }, () => {
         if (hashHistory.location.pathname === "/") {
-          hashHistory.replace(`/${ribbit.networkId}/`);
+          hashHistory.replace(`/${publicate.networkId}/`);
         }
       });
     }
   }
 
   render() {
-    if (!this.state.ribbit) {
+    if (!this.state.publicate) {
       return <Error />;
     }
     return (
@@ -106,7 +106,7 @@ class App extends React.Component<Props, State> {
             render={props => (
               <Signup
                 networkId={parseInt(props.match.params["networkId"])}
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
               />
             )}
             exact
@@ -116,7 +116,7 @@ class App extends React.Component<Props, State> {
             render={props => (
               <Home
                 networkId={parseInt(props.match.params["networkId"])}
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
               />
             )}
             exact
@@ -125,7 +125,7 @@ class App extends React.Component<Props, State> {
             path={`${process.env.PUBLIC_URL || ""}/:networkId/topics`}
             render={props => (
               <Topics
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 networkId={parseInt(props.match.params["networkId"])}
               />
             )}
@@ -135,7 +135,7 @@ class App extends React.Component<Props, State> {
             path={`${process.env.PUBLIC_URL || ""}/:networkId/settings`}
             render={props => (
               <Settings
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 networkId={parseInt(props.match.params["networkId"])}
               />
             )}
@@ -145,7 +145,7 @@ class App extends React.Component<Props, State> {
             path={`${process.env.PUBLIC_URL || ""}/:networkId/notifications`}
             render={props => (
               <Notifications
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 networkId={parseInt(props.match.params["networkId"])}
               />
             )}
@@ -157,7 +157,7 @@ class App extends React.Component<Props, State> {
             render={props => (
               <Profile
                 networkId={parseInt(props.match.params["networkId"])}
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 username={props.match.params["username"]}
               />
             )}
@@ -168,7 +168,7 @@ class App extends React.Component<Props, State> {
             render={props => (
               <Topic
                 networkId={parseInt(props.match.params["networkId"])}
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 topic={decodeURIComponent(props.match.params["topic"])}
               />
             )}
@@ -180,7 +180,7 @@ class App extends React.Component<Props, State> {
             render={props => (
               <Tx
                 networkId={parseInt(props.match.params["networkId"])}
-                ribbit={this.state.ribbit}
+                publicate={this.state.publicate}
                 transactionHash={props.match.params["transactionHash"]}
               />
             )}

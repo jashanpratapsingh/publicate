@@ -2,11 +2,11 @@ import * as React from "react";
 
 import Header, { Page } from "../components/header";
 import ProfileSettingsCard from "../components/profile-settings-card";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import { checkUserRegistration, checkNetworkId } from "../lib/utility";
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
 }
 interface State {}
@@ -17,21 +17,21 @@ export default class Settings extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    checkNetworkId(this.props.ribbit, this.props.networkId);
-    checkUserRegistration(this.props.ribbit);
+    checkNetworkId(this.props.publicate, this.props.networkId);
+    checkUserRegistration(this.props.publicate);
   }
 
   componentWillReceiveProps(newProps: Props) {
-    checkNetworkId(newProps.ribbit, newProps.networkId);
-    checkUserRegistration(newProps.ribbit);
+    checkNetworkId(newProps.publicate, newProps.networkId);
+    checkUserRegistration(newProps.publicate);
   }
 
   render() {
     return (
       <div className="settings-page">
-        <Header ribbit={this.props.ribbit} page={Page.SettingsPage} />
+        <Header publicate={this.props.publicate} page={Page.SettingsPage} />
         <ProfileSettingsCard
-          ribbit={this.props.ribbit}
+          publicate={this.props.publicate}
           showDeleteAppCacheButton={true}
         />
       </div>

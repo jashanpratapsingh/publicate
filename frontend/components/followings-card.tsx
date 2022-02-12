@@ -2,11 +2,11 @@ import * as React from "react";
 import { I18n } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 
 interface FollowingProps {
   username: string;
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
 }
 interface FollowingState {
@@ -31,7 +31,7 @@ class Following extends React.Component<FollowingProps, FollowingState> {
   }
 
   private async initializeFollowing(username: string) {
-    const userInfo = await this.props.ribbit.getUserInfoFromUsername(username);
+    const userInfo = await this.props.publicate.getUserInfoFromUsername(username);
     this.setState({
       userInfo
     });
@@ -72,7 +72,7 @@ class Following extends React.Component<FollowingProps, FollowingState> {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 interface State {}
 export default class FollowingsCard extends React.Component<Props, State> {
@@ -81,20 +81,20 @@ export default class FollowingsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     return (
       <I18n>
         {(t, { i18n }) => (
           <div className="followings-card card">
             <p className="title">{t("components/followings-card/title")}</p>
             <div className="followings-list">
-              {ribbit.settings.followingUsernames.map(
+              {publicate.settings.followingUsernames.map(
                 (followingUsername, offset) => {
                   return (
                     <Following
                       username={followingUsername.username}
-                      ribbit={ribbit}
-                      networkId={ribbit.networkId}
+                      publicate={publicate}
+                      networkId={publicate.networkId}
                       key={offset}
                     />
                   );

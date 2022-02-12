@@ -27,7 +27,7 @@ i18next.init({
         "general/Mention-the-following-users": "Mention the following users",
         "general/Configuration": "Configuration",
         "general/Repost-to-timeline": "Repost to timeline",
-        "general/Post-to-ribbit": "Post to #{ribbit} topic",
+        "general/Post-to-publicate": "Post to #{publicate} topic",
         "general/Post-as-IPFS-hash": "Post as IPFS hash (Infura)",
         "general/username": "username",
         "general/Username": "Username",
@@ -62,12 +62,12 @@ i18next.init({
           "Delete app local cache",
         "components/donate-panel/donate-placeholder":
           "(optional) donate 0.0000 ether to author",
-        "routes/signup/title": "Welcome to use Ribbit!",
+        "routes/signup/title": "Welcome to use Publicate!",
         "routes/signup/subtitle":
           "Please finish your account registration below",
         "routes/signup/topic-demo": "Or check the topic demo: ",
         "notification/init-error":
-          "Failed to initialize Ribbit. Please make sure you have MetaMask enabled and unlocked.",
+          "Failed to initialize Publicate. Please make sure you have MetaMask enabled and unlocked.",
         "notification/publish-profile": `Profile is being published to blockchain.\nPlease wait until the transaction finishes, then refresh your browser.`,
         "notification/publish-profile-success": `Your profile information is now saved on blockchain. Please refresh your browser.`,
         "notification/publish-profile-failure": `Failed to save your profile to blockchain.`,
@@ -116,7 +116,7 @@ i18next.init({
         "general/Mention-the-following-users": "提到一下用户",
         "general/Configuration": "发布设置",
         "general/Repost-to-timeline": "转发到个人主页",
-        "general/Post-to-ribbit": "发布到 #{ribbit} 话题",
+        "general/Post-to-publicate": "发布到 #{publicate} 话题",
         "general/Post-as-IPFS-hash": "发布为 IPFS 哈希（Infura）",
         "general/username": "用户名",
         "general/Username": "用户名",
@@ -149,11 +149,11 @@ i18next.init({
         "components/profile-settings-card/delete-app-cache": "清除程序本地缓存",
         "components/donate-panel/donate-placeholder":
           "（可选）捐赠 0.0000 以太币给作者",
-        "routes/signup/title": "欢迎使用 Ribbit！",
+        "routes/signup/title": "欢迎使用 Publicate！",
         "routes/signup/subtitle": "请在下方完成账号注册",
         "routes/signup/topic-demo": "或者查看话题演示：",
         "notification/init-error":
-          "启动 Ribbit 失败。请确保 MetaMask 已启动并解锁。",
+          "启动 Publicate 失败。请确保 MetaMask 已启动并解锁。",
         "notification/publish-profile": `用户信息正在被发布到区块链。\n请等候交易完成，然后刷新浏览器。`,
         "notification/publish-profile-success": `你的用户信息已被成功保存到区块链。请刷新浏览器，`,
         "notification/publish-profile-failure": `无法将你的用户信息保存到区块链。`,

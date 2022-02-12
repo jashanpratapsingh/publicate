@@ -7,12 +7,12 @@ import UserTopPanel from "./user-top-panel";
 import ActionsBottomPanel from "./actions-bottom-panel";
 
 import { FeedInfo, generateFeedInfoFromTransactionInfo } from "../lib/feed";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import hashHistory from "../lib/history";
 
 interface Props {
   feedInfo: FeedInfo;
-  ribbit: Ribbit;
+  publicate: Publicate;
   hideActionsPanel?: boolean;
   hideParent?: boolean;
 }
@@ -67,14 +67,14 @@ export default class FeedCard extends Component<Props, State> {
       return;
     }
     if (feedInfo.feedType === "reply") {
-      const parentTransactionInfo = await this.props.ribbit.getTransactionInfo({
+      const parentTransactionInfo = await this.props.publicate.getTransactionInfo({
         transactionHash:
           feedInfo.transactionInfo.decodedInputData.params[
             "parentTransactionHash"
           ].value
       });
       const parentFeedInfo = await generateFeedInfoFromTransactionInfo(
-        this.props.ribbit,
+        this.props.publicate,
         parentTransactionInfo
       );
       this.setState({
@@ -88,7 +88,7 @@ export default class FeedCard extends Component<Props, State> {
       return;
     }
     /* window.open(
-      `${window.location.pathname}#/${this.props.ribbit.networkId}/tx/${
+      `${window.location.pathname}#/${this.props.publicate.networkId}/tx/${
         this.props.feedInfo.transactionInfo.hash
       }`,
     );
@@ -97,12 +97,12 @@ export default class FeedCard extends Component<Props, State> {
     event.preventDefault();
     console.log(
       "push: ",
-      `/${this.props.ribbit.networkId}/tx/${
+      `/${this.props.publicate.networkId}/tx/${
         this.props.feedInfo.transactionInfo.hash
       }`
     );
     hashHistory.push(
-      `/${this.props.ribbit.networkId}/tx/${
+      `/${this.props.publicate.networkId}/tx/${
         this.props.feedInfo.transactionInfo.hash
       }`
     );
@@ -125,7 +125,7 @@ export default class FeedCard extends Component<Props, State> {
         <div className="parent">
           <FeedCard
             feedInfo={this.state.parentFeedInfo}
-            ribbit={this.props.ribbit}
+            publicate={this.props.publicate}
             hideParent={true}
           />
         </div>
@@ -137,7 +137,7 @@ export default class FeedCard extends Component<Props, State> {
       return (
         <div className="feed-card card" onClick={this.clickCard}>
           <UserTopPanel
-            ribbit={this.props.ribbit}
+            publicate={this.props.publicate}
             feedInfo={this.props.feedInfo}
           />
           <div className="content-panel">
@@ -167,7 +167,7 @@ export default class FeedCard extends Component<Props, State> {
           {this.props.hideActionsPanel ? null : (
             <ActionsBottomPanel
               feedInfo={this.props.feedInfo}
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
             />
           )}
         </div>
@@ -178,7 +178,7 @@ export default class FeedCard extends Component<Props, State> {
         <div className="feed-card card" onClick={this.clickCard}>
           <UserTopPanel
             feedInfo={this.props.feedInfo}
-            ribbit={this.props.ribbit}
+            publicate={this.props.publicate}
           />
           <div className="content-panel">
             {summary.video ? (
@@ -203,7 +203,7 @@ export default class FeedCard extends Component<Props, State> {
           {this.props.hideActionsPanel ? null : (
             <ActionsBottomPanel
               feedInfo={this.props.feedInfo}
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
             />
           )}
         </div>

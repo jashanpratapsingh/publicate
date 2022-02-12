@@ -8,13 +8,13 @@ import FeedCard from "./feed-card";
 
 import * as utility from "../lib/utility";
 import { FeedInfo, generateFeedInfoFromTransactionInfo } from "../lib/feed";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 
 import TopicFeedCards from "../components/topic-feed-cards";
 
 interface Props {
   feedInfo: FeedInfo;
-  ribbit: Ribbit;
+  publicate: Publicate;
   hideActionsPanel?: boolean;
   hideReplies?: boolean;
 }
@@ -71,11 +71,11 @@ export default class ArticleCard extends Component<Props, State> {
       feedInfo.transactionInfo.decodedInputData.params["parentTransactionHash"]
         .value;
     try {
-      const transactionInfo = await this.props.ribbit.getTransactionInfo({
+      const transactionInfo = await this.props.publicate.getTransactionInfo({
         transactionHash: parentTransactionHash
       });
       const feedInfo = await generateFeedInfoFromTransactionInfo(
-        this.props.ribbit,
+        this.props.publicate,
         transactionInfo
       );
 
@@ -105,7 +105,7 @@ export default class ArticleCard extends Component<Props, State> {
         <div className="parent">
           {this.state.parent ? (
             <FeedCard
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
               feedInfo={this.state.parent}
               hideParent={true}
             />
@@ -115,7 +115,7 @@ export default class ArticleCard extends Component<Props, State> {
           ) : null}
         </div>
         <div className="article-card card">
-          <UserTopPanel ribbit={this.props.ribbit} feedInfo={feedInfo} />
+          <UserTopPanel publicate={this.props.publicate} feedInfo={feedInfo} />
           <div
             className="content"
             ref={elem => {
@@ -125,7 +125,7 @@ export default class ArticleCard extends Component<Props, State> {
           />
           {this.props.hideActionsPanel ? null : (
             <ActionsBottomPanel
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
               feedInfo={feedInfo}
             />
           )}
@@ -134,7 +134,7 @@ export default class ArticleCard extends Component<Props, State> {
           <div className="replies">
             <TopicFeedCards
               areReplies={true}
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
               topic={this.props.feedInfo.transactionInfo.hash}
             />
           </div>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { I18n } from "react-i18next";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import hashHistory from "../lib/history";
 import { checkNetworkId } from "../lib/utility";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import ProfileSettingsCard from "../components/profile-settings-card";
 
 interface Props {
   networkId: number;
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 interface State {}
 export default class Signup extends React.Component<Props, State> {
@@ -18,13 +18,13 @@ export default class Signup extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    checkNetworkId(this.props.ribbit, this.props.networkId);
+    checkNetworkId(this.props.publicate, this.props.networkId);
     this.checkUsernameExists();
   }
 
   async checkUsernameExists() {
-    const username = await this.props.ribbit.getUsernameFromAddress(
-      this.props.ribbit.accountAddress
+    const username = await this.props.publicate.getUsernameFromAddress(
+      this.props.publicate.accountAddress
     );
     if (username.length) {
       hashHistory.replace(`/${this.props.networkId}/`);
@@ -41,13 +41,13 @@ export default class Signup extends React.Component<Props, State> {
               {t("routes/signup/subtitle")} <br />
               {t("routes/signup/topic-demo")}{" "}
               <Link
-                to={`/${this.props.networkId}/topic/ribbit`}
+                to={`/${this.props.networkId}/topic/publicate`}
                 target="_blank"
               >
-                #ribbit
+                #publicate
               </Link>
             </p>
-            <ProfileSettingsCard ribbit={this.props.ribbit} reset={true} />
+            <ProfileSettingsCard publicate={this.props.publicate} reset={true} />
           </div>
         )}
       </I18n>

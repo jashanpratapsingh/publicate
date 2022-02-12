@@ -1,7 +1,7 @@
 import * as React from "react";
 import { I18n } from "react-i18next";
 import ProfileCard from "./profile-card";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 
 import { UnControlled as CodeMirror, IInstance } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
@@ -10,7 +10,7 @@ import "codemirror/mode/markdown/markdown";
 import i18n from "../i18n/i18n";
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   reset?: boolean;
   showDeleteAppCacheButton?: boolean;
 }
@@ -33,22 +33,22 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
       name: "",
       avatar: "",
       cover: "",
-      bio: "ribbit, ribbit, ribbit…",
+      bio: "publicate, publicate, publicate…",
       lang: "en"
     };
   }
 
   componentDidMount() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (this.props.reset) {
       return;
     }
   }
 
   initUserProfile() {
-    const ribbit = this.props.ribbit;
-    ribbit
-      .getUserInfoFromAddress(ribbit.accountAddress)
+    const publicate = this.props.publicate;
+    publicate
+      .getUserInfoFromAddress(publicate.accountAddress)
       .then(userInfo => {
         console.log(userInfo);
         this.setState({
@@ -58,8 +58,8 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
             ? "https://tinyurl.com/yada8txd"
             : userInfo.avatar,
           cover: userInfo.cover || "https://tinyurl.com/ycozeccn",
-          bio: userInfo.bio || "#{ribbit}, #{ribbit}, #{ribbit}…",
-          lang: ribbit.settings.language
+          bio: userInfo.bio || "#{publicate}, #{publicate}, #{publicate}…",
+          lang: publicate.settings.language
         });
       })
       .catch(error => {
@@ -98,7 +98,7 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
       cover: this.state.cover,
       avatar: this.state.avatar,
       bio: this.state.bio,
-      address: this.props.ribbit.accountAddress
+      address: this.props.publicate.accountAddress
     };
     if (this.state.username.trim().match(/^unknown$/i)) {
       return new window["Noty"]({
@@ -109,7 +109,7 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
         timeout: 10000
       }).show();
     }
-    this.props.ribbit
+    this.props.publicate
       .setUserMetadata(userInfo)
       .then(hash => {
         new window["Noty"]({
@@ -135,16 +135,16 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
         lang
       },
       () => {
-        const ribbit = this.props.ribbit;
-        ribbit.settings.language = lang;
-        ribbit.setSettings(ribbit.settings);
+        const publicate = this.props.publicate;
+        publicate.settings.language = lang;
+        publicate.setSettings(publicate.settings);
         i18n.changeLanguage(lang);
       }
     );
   };
 
   deleteAppCache = () => {
-    this.props.ribbit
+    this.props.publicate
       .destroyDB()
       .then(() => {
         new window["Noty"]({
@@ -173,7 +173,7 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
     };
     const userInfo: UserInfo = {
       username: this.state.username,
-      address: this.props.ribbit.accountAddress,
+      address: this.props.publicate.accountAddress,
       name: this.state.name,
       avatar: this.state.avatar,
       cover: this.state.cover,
@@ -259,7 +259,7 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
             <p className="title">{t("general/Profile-preview")}</p>
             <ProfileCard
               userInfo={userInfo}
-              ribbit={this.props.ribbit}
+              publicate={this.props.publicate}
               hideFollowingBtn={true}
             />
             {this.props.showDeleteAppCacheButton ? (

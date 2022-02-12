@@ -2,7 +2,7 @@ import * as React from "react";
 import MediaQuery from "react-responsive";
 import { I18n } from "react-i18next";
 
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import {
   FeedInfo,
   Summary,
@@ -36,7 +36,7 @@ interface FeedEntry {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
 }
 interface State {
@@ -65,24 +65,24 @@ export default class Topics extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     document.body.scrollTop = 0;
-    checkNetworkId(ribbit, this.props.networkId);
-    checkUserRegistration(ribbit);
-    this.updateUserInfo(ribbit);
-    this.showUserTopics(ribbit);
+    checkNetworkId(publicate, this.props.networkId);
+    checkUserRegistration(publicate);
+    this.updateUserInfo(publicate);
+    this.showUserTopics(publicate);
     this.bindWindowScrollEvent();
   }
 
   componentWillReceiveProps(newProps: Props) {
     // in order to get click in Header home tab to reload home page.
     // console.log('home will receive props')
-    // if (this.props.ribbit !== newProps.ribbit) {
+    // if (this.props.publicate !== newProps.publicate) {
     document.body.scrollTop = 0;
-    checkNetworkId(newProps.ribbit, newProps.networkId);
-    checkUserRegistration(newProps.ribbit);
-    this.updateUserInfo(newProps.ribbit);
-    this.showUserTopics(newProps.ribbit);
+    checkNetworkId(newProps.publicate, newProps.networkId);
+    checkUserRegistration(newProps.publicate);
+    this.updateUserInfo(newProps.publicate);
+    this.showUserTopics(newProps.publicate);
     this.bindWindowScrollEvent();
     // }
   }
@@ -91,28 +91,28 @@ export default class Topics extends React.Component<Props, State> {
     // TODO: Stop loading home feeds.
   }
 
-  updateUserInfo(ribbit: Ribbit) {
-    if (!ribbit) return;
-    ribbit.getUserInfoFromAddress(ribbit.accountAddress).then(userInfo => {
+  updateUserInfo(publicate: Publicate) {
+    if (!publicate) return;
+    publicate.getUserInfoFromAddress(publicate.accountAddress).then(userInfo => {
       this.setState({
         userInfo
       });
     });
   }
 
-  async showUserTopics(ribbit: Ribbit) {
-    if (!ribbit) return;
+  async showUserTopics(publicate: Publicate) {
+    if (!publicate) return;
     // initialize feedEntries:
     const feedEntries: FeedEntry[] = [];
     const creation = Date.now();
     // TODO: change followingUsernames to followingUsers and store their addresses instead of usernames.
-    for (let i = 0; i < ribbit.settings.followingTopics.length; i++) {
-      const topic = ribbit.settings.followingTopics[i].topic;
+    for (let i = 0; i < publicate.settings.followingTopics.length; i++) {
+      const topic = publicate.settings.followingTopics[i].topic;
       if (topic) {
         let blockNumber;
         blockNumber = parseInt(
-          await ribbit.contractInstance.methods
-            .getCurrentTagInfoByTrend(ribbit.formatTag(topic))
+          await publicate.contractInstance.methods
+            .getCurrentTagInfoByTrend(publicate.formatTag(topic))
             .call()
         );
         feedEntries.push({
@@ -137,7 +137,7 @@ export default class Topics extends React.Component<Props, State> {
 
   showTopicsFeeds() {
     const feedEntries = this.state.feedEntries;
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (!feedEntries.length) {
       return this.setState({
         loading: false,
@@ -169,9 +169,9 @@ export default class Topics extends React.Component<Props, State> {
             maxOffset = offset;
           }
         });
-        const formattedTag = ribbit.formatTag(maxTopic);
+        const formattedTag = publicate.formatTag(maxTopic);
         // console.log("showTopicsFeeds", maxBlockNumber, maxCreation, maxUserAddress)
-        const transactionInfo = await ribbit.getTransactionInfo(
+        const transactionInfo = await publicate.getTransactionInfo(
           {
             tag: formattedTag,
             blockNumber: maxBlockNumber,
@@ -223,7 +223,7 @@ export default class Topics extends React.Component<Props, State> {
           feedEntry.creation = transactionInfo.creation;
 
           const feedInfo = await generateFeedInfoFromTransactionInfo(
-            this.props.ribbit,
+            this.props.publicate,
             transactionInfo
           );
           const feeds = this.state.feeds;
@@ -299,8 +299,8 @@ export default class Topics extends React.Component<Props, State> {
   };
 
   render() {
-    if (this.props.ribbit && this.props.ribbit.accountAddress) {
-      const ribbit = this.props.ribbit;
+    if (this.props.publicate && this.props.publicate.accountAddress) {
+      const publicate = this.props.publicate;
       const cards = (
         <I18n>
           {t => (
@@ -309,7 +309,7 @@ export default class Topics extends React.Component<Props, State> {
                 <FeedCard
                   key={index}
                   feedInfo={feedInfo}
-                  ribbit={this.props.ribbit}
+                  publicate={this.props.publicate}
                 />
               ))}
               <p id="feed-footer">
@@ -325,22 +325,22 @@ export default class Topics extends React.Component<Props, State> {
       const profileCard = (
         <ProfileCard
           userInfo={this.state.userInfo}
-          ribbit={this.props.ribbit}
+          publicate={this.props.publicate}
         />
       );
-      const followingsCard = <FollowingsCard ribbit={this.props.ribbit} />;
-      const topicsCard = <TopicsCard ribbit={this.props.ribbit} />;
+      const followingsCard = <FollowingsCard publicate={this.props.publicate} />;
+      const topicsCard = <TopicsCard publicate={this.props.publicate} />;
       const postBtnGroup = (
         <div className="post-btn-group">
-          <div className="ribbit-btn btn" onClick={this.toggleEditPanel}>
-            <i className="fas fa-pen-square" />Ribbit
+          <div className="publicate-btn btn" onClick={this.toggleEditPanel}>
+            <i className="fas fa-pen-square" />Publicate
           </div>
-          <a href="https://github.com/shd101wyy/ribbit" target="_blank">
+          <a href="https://github.com/shd101wyy/publicate" target="_blank">
             <div className="github-btn btn">
               <i className="fab fa-github" />
             </div>
           </a>
-          <a href="https://github.com/shd101wyy/ribbit/issues" target="_blank">
+          <a href="https://github.com/shd101wyy/publicate/issues" target="_blank">
             <div className="bug-btn github-btn btn">
               <i className="fas fa-bug" />
             </div>
@@ -356,7 +356,7 @@ export default class Topics extends React.Component<Props, State> {
 
       return (
         <div className="home topics-page">
-          <Header ribbit={this.props.ribbit} page={Page.TopicsPage} />
+          <Header publicate={this.props.publicate} page={Page.TopicsPage} />
           <div className="container">
             <MediaQuery query="(max-width: 1368px)">
               <div className="left-panel">
@@ -385,7 +385,7 @@ export default class Topics extends React.Component<Props, State> {
               </div>
             </MediaQuery>
             {this.state.showEditPanel ? (
-              <Edit cancel={this.toggleEditPanel} ribbit={this.props.ribbit} />
+              <Edit cancel={this.toggleEditPanel} publicate={this.props.publicate} />
             ) : null}
           </div>
         </div>

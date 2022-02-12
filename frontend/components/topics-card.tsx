@@ -2,7 +2,7 @@ import * as React from "react";
 import { I18n } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 
 interface TopicProps {
   name: string;
@@ -30,7 +30,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 interface State {}
 export default class TopicsCard extends React.Component<Props, State> {
@@ -39,18 +39,18 @@ export default class TopicsCard extends React.Component<Props, State> {
   }
 
   render() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     return (
       <I18n>
         {(t, { i18n }) => (
           <div className="topics-card card">
             <p className="title">{t("components/topics-card/title")}</p>
             <div className="topics-list">
-              {ribbit.settings.followingTopics.map((followingTopic, offset) => {
+              {publicate.settings.followingTopics.map((followingTopic, offset) => {
                 return (
                   <Topic
                     name={followingTopic.topic}
-                    networkId={ribbit.networkId}
+                    networkId={publicate.networkId}
                     key={offset}
                   />
                 );

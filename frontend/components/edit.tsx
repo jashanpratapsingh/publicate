@@ -11,7 +11,7 @@ import Preview from "./preview";
 import FeedCard from "./feed-card";
 
 import history from "../lib/history";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import * as utility from "../lib/utility";
 import { getTopicsAndMentionsFromHTML, FeedInfo } from "../lib/feed";
 import { renderMarkdown } from "../lib/markdown";
@@ -19,7 +19,7 @@ import i18n from "../i18n/i18n";
 
 interface Props {
   cancel: () => void;
-  ribbit: Ribbit;
+  publicate: Publicate;
   /**
    * If feedInfo is provided, then it means it's a reply.
    */
@@ -34,7 +34,7 @@ interface State {
   hiddenMentions: { [key: string]: boolean }; // key is address
   replies: { name: string; address: string }[];
   hiddenReplies: { [key: string]: boolean }; // key is address
-  postToRibbitTopic: boolean;
+  postToPublicateTopic: boolean;
   repostToTimeline: boolean;
   generatingIPFSHash: boolean;
 }
@@ -44,7 +44,7 @@ export default class Edit extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      code: window.localStorage["markdown-cache"] || `ribbit...`,
+      code: window.localStorage["markdown-cache"] || `publicate...`,
       previewIsOn: false,
       topics: [],
       hiddenTopics: {},
@@ -52,7 +52,7 @@ export default class Edit extends Component<Props, State> {
       hiddenMentions: {},
       replies: [],
       hiddenReplies: {},
-      postToRibbitTopic: false,
+      postToPublicateTopic: false,
       repostToTimeline: false,
       generatingIPFSHash: false
     };
@@ -60,12 +60,12 @@ export default class Edit extends Component<Props, State> {
 
   componentDidMount() {
     // console.log("@@ MOUNT Edit @@", this.props.parentFeedInfo);
-    utility.checkUserRegistration(this.props.ribbit);
+    utility.checkUserRegistration(this.props.publicate);
     this.checkTopicsAndMentions();
     this.analyzeReplies();
     document.body.style.overflow = "hidden";
     this.setState({
-      postToRibbitTopic: this.props.ribbit.settings.postToRibbitTopic
+      postToPublicateTopic: this.props.publicate.settings.postToPublicateTopic
     });
   }
 
@@ -84,7 +84,7 @@ export default class Edit extends Component<Props, State> {
 
     while (transactionInfo) {
       const address = transactionInfo.from;
-      const name = (await this.props.ribbit.getUserInfoFromAddress(address))
+      const name = (await this.props.publicate.getUserInfoFromAddress(address))
         .name;
       if (!exists[address]) {
         exists[address] = true;
@@ -97,7 +97,7 @@ export default class Edit extends Component<Props, State> {
         const parentTransactionHash =
           transactionInfo.decodedInputData.params["parentTransactionHash"]
             .value;
-        transactionInfo = await this.props.ribbit.getTransactionInfo({
+        transactionInfo = await this.props.publicate.getTransactionInfo({
           transactionHash: parentTransactionHash
         });
       } else {
@@ -121,7 +121,7 @@ export default class Edit extends Component<Props, State> {
     // check topics and mentions
     getTopicsAndMentionsFromHTML(
       renderMarkdown(this.state.code),
-      this.props.ribbit
+      this.props.publicate
     ).then(({ topics, mentions }) => {
       if (
         JSON.stringify(this.state.topics) !== JSON.stringify(topics) ||
@@ -137,7 +137,7 @@ export default class Edit extends Component<Props, State> {
 
   private postFeed = async () => {
     // TODO: validate feed
-    const ribbit = this.props.ribbit,
+    const publicate = this.props.publicate,
       content = this.state.code.trim();
 
     const topics = [];
@@ -146,8 +146,8 @@ export default class Edit extends Component<Props, State> {
         topics.push(topic);
       }
     }
-    if (this.state.postToRibbitTopic) {
-      topics.push("ribbit");
+    if (this.state.postToPublicateTopic) {
+      topics.push("publicate");
     }
 
     // TODO: replies
@@ -173,7 +173,7 @@ export default class Edit extends Component<Props, State> {
       }).show();
       console.log("generating ipfs hash");
       this.setState({ generatingIPFSHash: true }, async () => {
-        const ipfsHash = (await this.props.ribbit.ipfsAdd(content)).hash;
+        const ipfsHash = (await this.props.publicate.ipfsAdd(content)).hash;
         console.log("ipfsHash: ", ipfsHash);
         const d = multihash.getBytes32FromMultiash(ipfsHash);
         const digest = d.digest;
@@ -191,7 +191,7 @@ export default class Edit extends Component<Props, State> {
         try {
           if (this.props.parentFeedInfo) {
             // reply
-            await ribbit.replyFeed(
+            await publicate.replyFeed(
               digest,
               hashFunction,
               size,
@@ -201,7 +201,7 @@ export default class Edit extends Component<Props, State> {
             );
           } else {
             // post
-            await ribbit.postFeed(digest, hashFunction, size, tags);
+            await publicate.postFeed(digest, hashFunction, size, tags);
           }
           window.localStorage["markdown-cache"] = "";
           this.props.cancel();
@@ -411,7 +411,7 @@ export default class Edit extends Component<Props, State> {
               <div>
                 <h2 style={{ textAlign: "center" }}>{t("general/Reply-to")}</h2>
                 <FeedCard
-                  ribbit={this.props.ribbit}
+                  publicate={this.props.publicate}
                   feedInfo={this.props.parentFeedInfo}
                   hideActionsPanel={true}
                   hideParent={true}
@@ -503,31 +503,31 @@ export default class Edit extends Component<Props, State> {
                     <div
                       className={
                         "config" +
-                        (this.state.postToRibbitTopic ? "" : " hidden")
+                        (this.state.postToPublicateTopic ? "" : " hidden")
                       }
                       onClick={() =>
                         this.setState(
                           {
-                            postToRibbitTopic: !this.state.postToRibbitTopic
+                            postToPublicateTopic: !this.state.postToPublicateTopic
                           },
                           () => {
-                            this.props.ribbit.settings.postToRibbitTopic = this.state.postToRibbitTopic;
-                            this.props.ribbit.setSettings(
-                              this.props.ribbit.settings
+                            this.props.publicate.settings.postToPublicateTopic = this.state.postToPublicateTopic;
+                            this.props.publicate.setSettings(
+                              this.props.publicate.settings
                             );
                           }
                         )
                       }
                     >
                       {" "}
-                      {t("general/Post-to-ribbit")}
+                      {t("general/Post-to-publicate")}
                     </div>
                   </div>
                 </div>
                 {/* preview */}
                 <Preview
                   markdown={this.state.code}
-                  ribbit={this.props.ribbit}
+                  publicate={this.props.publicate}
                 />
               </div>
             ) : (

@@ -138,7 +138,7 @@ md.inline.ruler.before("escape", "media", (state, silent) => {
 md.renderer.rules.media = (tokens, idx) => {
   const mediaType: string = tokens[idx].mediaType;
   const mediaValue: string = tokens[idx].mediaValue;
-  return `<div class="ribbit-media" data-media-type="${mediaType}" data-media-value="${mediaValue}">loading...</div>`;
+  return `<div class="publicate-media" data-media-type="${mediaType}" data-media-value="${mediaValue}">loading...</div>`;
 };
 
 export function renderMarkdown(markdown: string): string {

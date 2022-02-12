@@ -20,7 +20,7 @@ export default class SharePanel extends React.Component<Props, State> {
   };
 
   shareToFacebook = () => {
-    const targetUrl = `https://shd101wyy.github.io/ribbit/#/${
+    const targetUrl = `https://shd101wyy.github.io/publicate/#/${
       this.props.networkId
     }/tx/${this.props.transactionHash}`;
     window.open(
@@ -31,12 +31,12 @@ export default class SharePanel extends React.Component<Props, State> {
   };
 
   shareToTwitter = () => {
-    const targetUrl = `https://shd101wyy.github.io/ribbit/#/${
+    const targetUrl = `https://shd101wyy.github.io/publicate/#/${
       this.props.networkId
     }/tx/${this.props.transactionHash}`;
     window.open(
       "https://twitter.com/intent/tweet?text=" +
-        encodeURIComponent("Check this Ribbit post!") +
+        encodeURIComponent("Check this Publicate post!") +
         "&url=" +
         encodeURIComponent(targetUrl),
       "_blank"
@@ -44,7 +44,7 @@ export default class SharePanel extends React.Component<Props, State> {
   };
 
   shareToReddit = () => {
-    const targetUrl = `https://shd101wyy.github.io/ribbit/#/${
+    const targetUrl = `https://shd101wyy.github.io/publicate/#/${
       this.props.networkId
     }/tx/${this.props.transactionHash}`;
     window.open(
@@ -54,27 +54,27 @@ export default class SharePanel extends React.Component<Props, State> {
   };
 
   shareToLinkedin = () => {
-    const targetUrl = `https://shd101wyy.github.io/ribbit/#/${
+    const targetUrl = `https://shd101wyy.github.io/publicate/#/${
       this.props.networkId
     }/tx/${this.props.transactionHash}`;
     window.open(
       "https://www.linkedin.com/shareArticle?mini=true&url=" +
         encodeURIComponent(targetUrl) +
         "&title=" +
-        encodeURIComponent("Check this Ribbit post!"),
+        encodeURIComponent("Check this Publicate post!"),
       "_blank"
     );
   };
 
   shareToWeibo = () => {
-    const targetUrl = `https://shd101wyy.github.io/ribbit/#/${
+    const targetUrl = `https://shd101wyy.github.io/publicate/#/${
       this.props.networkId
     }/tx/${this.props.transactionHash}`;
     window.open(
       `http://service.weibo.com/share/share.php?url=${encodeURIComponent(
         targetUrl
       )}&title=${encodeURIComponent(
-        "Check this Ribbit post!"
+        "Check this Publicate post!"
       )}&pic=&ralateUid=&language=zh_cn`
     );
   };

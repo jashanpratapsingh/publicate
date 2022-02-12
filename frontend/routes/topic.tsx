@@ -3,7 +3,7 @@
  */
 import * as React from "react";
 import { I18n } from "react-i18next";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import {
   FeedInfo,
   generateSummaryFromHTML,
@@ -18,7 +18,7 @@ import TopicFeedCards from "../components/topic-feed-cards";
 import { TransactionInfo } from "../lib/transaction";
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
   topic: string;
 }
@@ -39,42 +39,42 @@ export default class profile extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    checkNetworkId(this.props.ribbit, this.props.networkId);
+    checkNetworkId(this.props.publicate, this.props.networkId);
     this.initializeTopic(this.props.topic);
   }
 
   componentWillReceiveProps(newProps: Props) {
     // if (newProps.topic !== this.props.topic) {
-    checkNetworkId(newProps.ribbit, newProps.networkId);
+    checkNetworkId(newProps.publicate, newProps.networkId);
     this.initializeTopic(newProps.topic);
     // }
   }
 
   async initializeTopic(topic: string) {
     // check following or not
-    const followingTopics = this.props.ribbit.settings.followingTopics;
+    const followingTopics = this.props.publicate.settings.followingTopics;
     const following = !!followingTopics.filter(x => x.topic === topic).length;
     this.setState({
       following
     });
 
     // update cover
-    const ribbit = this.props.ribbit;
-    const formattedTag = ribbit.formatTag(topic);
+    const publicate = this.props.publicate;
+    const formattedTag = publicate.formatTag(topic);
     const blockNumber = parseInt(
-      await ribbit.contractInstance.methods
+      await publicate.contractInstance.methods
         .getCurrentTagInfoByTrend(formattedTag)
         .call()
     );
     if (blockNumber) {
-      const transactionInfo = await ribbit.getTransactionInfo({
+      const transactionInfo = await publicate.getTransactionInfo({
         tag: formattedTag,
         maxCreation: Date.now(),
         blockNumber
       });
       if (transactionInfo) {
         const authorAddress = transactionInfo.from;
-        const userInfo = await ribbit.getUserInfoFromAddress(authorAddress);
+        const userInfo = await publicate.getUserInfoFromAddress(authorAddress);
         if (userInfo) {
           this.setState({
             cover: userInfo.cover
@@ -85,7 +85,7 @@ export default class profile extends React.Component<Props, State> {
   }
 
   followTopic = () => {
-    this.props.ribbit
+    this.props.publicate
       .followTopic(this.props.topic)
       .then(() => {
         this.setState({
@@ -102,7 +102,7 @@ export default class profile extends React.Component<Props, State> {
   };
 
   unfollowTopic = () => {
-    this.props.ribbit
+    this.props.publicate
       .unfollowTopic(this.props.topic)
       .then(() => {
         this.setState({
@@ -122,7 +122,7 @@ export default class profile extends React.Component<Props, State> {
     /**
      * Prevent from loading user address as topic.
      */
-    if (this.props.ribbit.web3.utils.isAddress(this.props.topic)) {
+    if (this.props.publicate.web3.utils.isAddress(this.props.topic)) {
       return (
         <I18n>
           {(t, { i18n }) => (
@@ -139,7 +139,7 @@ export default class profile extends React.Component<Props, State> {
       <I18n>
         {(t, { i18n }) => (
           <div className="topic-page">
-            <Header ribbit={this.props.ribbit} />
+            <Header publicate={this.props.publicate} />
             <div className="container">
               <div className="topic-card card">
                 <div
@@ -177,7 +177,7 @@ export default class profile extends React.Component<Props, State> {
                 )}
               </div>
               <TopicFeedCards
-                ribbit={this.props.ribbit}
+                publicate={this.props.publicate}
                 topic={this.props.topic}
               />
             </div>

@@ -1,6 +1,6 @@
 export interface Settings {
   postAsIPFSHash: boolean;
-  postToRibbitTopic: boolean;
+  postToPublicateTopic: boolean;
   followingUsernames: {
     /**
      * username that you are following
@@ -30,7 +30,7 @@ export interface Settings {
     order?: number;
   }[];
   /**
-   * Language for Ribbit web interface.
+   * Language for Publicate web interface.
    */
   language: string;
 }

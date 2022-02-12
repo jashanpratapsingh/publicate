@@ -3,7 +3,7 @@ import { I18n } from "react-i18next";
 
 import Header, { Page } from "../components/header";
 import FeedCard from "../components/feed-card";
-import { Ribbit, UserInfo } from "../lib/ribbit";
+import { Publicate, UserInfo } from "../lib/publicate";
 import { checkUserRegistration, checkNetworkId } from "../lib/utility";
 import {
   FeedInfo,
@@ -20,7 +20,7 @@ interface CurrentFeed {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   networkId: number;
 }
 interface State {
@@ -43,20 +43,20 @@ export default class Notifications extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     document.body.scrollTop = 0;
-    checkNetworkId(ribbit, this.props.networkId);
-    checkUserRegistration(ribbit);
-    this.showUserNotifications(ribbit);
+    checkNetworkId(publicate, this.props.networkId);
+    checkUserRegistration(publicate);
+    this.showUserNotifications(publicate);
     this.bindWindowScrollEvent();
   }
 
   componentWillReceiveProps(newProps: Props) {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     document.body.scrollTop = 0;
-    checkNetworkId(newProps.ribbit, newProps.networkId);
-    checkUserRegistration(ribbit);
-    this.showUserNotifications(ribbit);
+    checkNetworkId(newProps.publicate, newProps.networkId);
+    checkUserRegistration(publicate);
+    this.showUserNotifications(publicate);
     this.bindWindowScrollEvent();
   }
 
@@ -64,10 +64,10 @@ export default class Notifications extends React.Component<Props, State> {
     // TODO: Stop loading notifications
   }
 
-  async showUserNotifications(ribbit: Ribbit) {
+  async showUserNotifications(publicate: Publicate) {
     const blockNumber = parseInt(
-      await ribbit.contractInstance.methods
-        .getCurrentTagInfoByTrend(ribbit.formatTag(ribbit.accountAddress))
+      await publicate.contractInstance.methods
+        .getCurrentTagInfoByTrend(publicate.formatTag(publicate.accountAddress))
         .call()
     );
     this.currentFeed = {
@@ -87,7 +87,7 @@ export default class Notifications extends React.Component<Props, State> {
   }
 
   async showNotificationFeeds() {
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (!this.currentFeed || !this.currentFeed.blockNumber) {
       return this.setState({
         loading: false,
@@ -102,8 +102,8 @@ export default class Notifications extends React.Component<Props, State> {
         loading: true
       },
       async () => {
-        const formattedTag = ribbit.formatTag(ribbit.accountAddress);
-        const transactionInfo = await ribbit.getTransactionInfo(
+        const formattedTag = publicate.formatTag(publicate.accountAddress);
+        const transactionInfo = await publicate.getTransactionInfo(
           {
             tag: formattedTag,
             maxCreation: this.currentFeed.creation,
@@ -150,7 +150,7 @@ export default class Notifications extends React.Component<Props, State> {
           };
 
           const feedInfo = await generateFeedInfoFromTransactionInfo(
-            ribbit,
+            publicate,
             transactionInfo
           );
           const feeds = this.state.feeds;
@@ -201,14 +201,14 @@ export default class Notifications extends React.Component<Props, State> {
       <I18n>
         {t => (
           <div className="notifications-page">
-            <Header ribbit={this.props.ribbit} page={Page.NotificationsPage} />
+            <Header publicate={this.props.publicate} page={Page.NotificationsPage} />
             <div className="container">
               <div className="cards">
                 {this.state.feeds.map((feedInfo, index) => (
                   <FeedCard
                     key={index}
                     feedInfo={feedInfo}
-                    ribbit={this.props.ribbit}
+                    publicate={this.props.publicate}
                   />
                 ))}
                 <p id="feed-footer">

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { I18n } from "react-i18next";
 
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import { FeedInfo } from "../lib/feed";
 import i18n from "../i18n/i18n";
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   feedInfo: FeedInfo;
   close: () => void;
 }
@@ -75,7 +75,7 @@ export default class DonatePanel extends React.Component<Props, State> {
     const authorAddress = wei
       ? this.props.feedInfo.userInfo.address
       : "0x0000000000000000000000000000000000000000"; // if wei is zero, then no donation, set userAddress to empty
-    this.props.ribbit
+    this.props.publicate
       .upvote(this.props.feedInfo.transactionInfo.hash, authorAddress, wei)
       .then(hash => {
         // do nothing.

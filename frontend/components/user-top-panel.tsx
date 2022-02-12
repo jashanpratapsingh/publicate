@@ -3,11 +3,11 @@ import { I18n } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { FeedInfo, formatFeedCreationTime } from "../lib/feed";
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 
 interface Props {
   feedInfo: FeedInfo;
-  ribbit: Ribbit;
+  publicate: Publicate;
 }
 interface State {
   donation: number;
@@ -59,7 +59,7 @@ export default class UserTopPanel extends React.Component<Props, State> {
       event.preventDefault();
       window.open(
         `${window.location.pathname}#/${
-          this.props.ribbit.networkId
+          this.props.publicate.networkId
         }/profile/${username}`,
         "_blank"
       );
@@ -84,7 +84,7 @@ export default class UserTopPanel extends React.Component<Props, State> {
     const userPanel = (
       <div className="user-panel">
         <Link
-          to={`/${this.props.ribbit.networkId}/profile/${
+          to={`/${this.props.publicate.networkId}/profile/${
             feedInfo.userInfo.username
           }`}
           target="_blank"
@@ -98,7 +98,7 @@ export default class UserTopPanel extends React.Component<Props, State> {
           />
         </Link>
         <Link
-          to={`/${this.props.ribbit.networkId}/profile/${
+          to={`/${this.props.publicate.networkId}/profile/${
             feedInfo.userInfo.username
           }`}
           target="_blank"
@@ -128,7 +128,7 @@ export default class UserTopPanel extends React.Component<Props, State> {
           {(t, { i18n }) => (
             <div className="top-bar">
               <Link
-                to={`/${this.props.ribbit.networkId}/profile/${
+                to={`/${this.props.publicate.networkId}/profile/${
                   feedInfo.repostUserInfo.username
                 }`}
                 target="_blank"

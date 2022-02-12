@@ -1,6 +1,6 @@
 import { formatDate, decompressString } from "./utility";
 import { TransactionInfo } from "./transaction";
-import { UserInfo, Ribbit } from "./ribbit";
+import { UserInfo, Publicate } from "./publicate";
 import { renderMarkdown } from "./markdown";
 
 export interface StateInfo {
@@ -52,7 +52,7 @@ export interface Summary {
 
 export async function getTopicsAndMentionsFromHTML(
   html: string,
-  ribbit: Ribbit
+  publicate: Publicate
 ): Promise<{
   topics: string[];
   mentions: { name: string; address: string }[];
@@ -67,7 +67,7 @@ export async function getTopicsAndMentionsFromHTML(
     const tagElem = tagElems[i] as HTMLAnchorElement;
     if (tagElem.classList.contains("tag-mention")) {
       const mention = tagElem.getAttribute("data-mention");
-      const userInfo = await ribbit.getUserInfoFromUsername(mention);
+      const userInfo = await publicate.getUserInfoFromUsername(mention);
       mentions.push({
         name: userInfo.username,
         address: userInfo.address
@@ -87,7 +87,7 @@ export async function getTopicsAndMentionsFromHTML(
 
 export async function generateSummaryFromHTML(
   html: string,
-  ribbit: Ribbit
+  publicate: Publicate
 ): Promise<Summary> {
   let title = "",
     summary = "",
@@ -171,17 +171,17 @@ export async function generateSummaryFromHTML(
       const tagElem = tagElems[i] as HTMLAnchorElement;
       if (tagElem.classList.contains("tag-mention")) {
         const mention = tagElem.getAttribute("data-mention");
-        const userInfo = await ribbit.getUserInfoFromUsername(mention);
+        const userInfo = await publicate.getUserInfoFromUsername(mention);
         tagElem.innerHTML = `<span class="mention">${userInfo.username}</span>`;
         tagElem.href = `${window.location.pathname}#/${
-          ribbit.networkId
+          publicate.networkId
         }/profile/${mention}`;
         tagElem.setAttribute("target", "_blank");
       } else if (tagElem.classList.contains("tag-topic")) {
         const topic = tagElem.getAttribute("data-topic");
         tagElem.innerHTML = `<span class="topic">${topic}</span>`;
         tagElem.href = `${window.location.pathname}#/${
-          ribbit.networkId
+          publicate.networkId
         }/topic/${topic}`;
         tagElem.setAttribute("target", "_blank");
       } else {
@@ -194,7 +194,7 @@ export async function generateSummaryFromHTML(
   await renderTags(div);
 
   async function renderMedias(div) {
-    const medias = div.getElementsByClassName("ribbit-media");
+    const medias = div.getElementsByClassName("publicate-media");
     let video = "";
     for (let i = 0; i < medias.length; i++) {
       const media = medias[i];
@@ -274,7 +274,7 @@ export function generateFakeStateInfo(): StateInfo {
 }
 
 export async function generateFeedInfoFromTransactionInfo(
-  ribbit: Ribbit,
+  publicate: Publicate,
   transactionInfo: TransactionInfo
 ): Promise<FeedInfo> {
   if (!transactionInfo) {
@@ -285,51 +285,51 @@ export async function generateFeedInfoFromTransactionInfo(
   let message, summary, userInfo, repostUserInfo, ipfsHash;
   let repostUserDonation = parseInt(transactionInfo.value) || 0;
   if (feedType === "post") {
-    const o = await ribbit.retrieveMessage(
+    const o = await publicate.retrieveMessage(
       transactionInfo.decodedInputData.params
     );
     message = o.message;
     ipfsHash = o.ipfsHash;
 
-    summary = await generateSummaryFromHTML(renderMarkdown(message), ribbit);
+    summary = await generateSummaryFromHTML(renderMarkdown(message), publicate);
 
-    userInfo = await ribbit.getUserInfoFromAddress(transactionInfo.from);
+    userInfo = await publicate.getUserInfoFromAddress(transactionInfo.from);
   } else if (feedType === "upvote") {
     const repostUserAddress = transactionInfo.from;
     // Get parent transactionInfo
-    transactionInfo = await ribbit.getTransactionInfo({
+    transactionInfo = await publicate.getTransactionInfo({
       transactionHash:
         transactionInfo.decodedInputData.params["parentTransactionHash"].value
     });
 
     // who reposts the feed
-    repostUserInfo = await ribbit.getUserInfoFromAddress(repostUserAddress);
+    repostUserInfo = await publicate.getUserInfoFromAddress(repostUserAddress);
 
     // author of the original feed
-    userInfo = await ribbit.getUserInfoFromAddress(transactionInfo.from);
+    userInfo = await publicate.getUserInfoFromAddress(transactionInfo.from);
 
-    const o = await ribbit.retrieveMessage(
+    const o = await publicate.retrieveMessage(
       transactionInfo.decodedInputData.params
     );
     message = o.message;
     ipfsHash = o.ipfsHash;
 
-    summary = await generateSummaryFromHTML(renderMarkdown(message), ribbit);
+    summary = await generateSummaryFromHTML(renderMarkdown(message), publicate);
   } else if (feedType === "reply") {
-    const o = await ribbit.retrieveMessage(
+    const o = await publicate.retrieveMessage(
       transactionInfo.decodedInputData.params
     );
     message = o.message;
     ipfsHash = o.ipfsHash;
 
-    summary = await generateSummaryFromHTML(renderMarkdown(message), ribbit);
+    summary = await generateSummaryFromHTML(renderMarkdown(message), publicate);
 
-    userInfo = await ribbit.getUserInfoFromAddress(transactionInfo.from);
+    userInfo = await publicate.getUserInfoFromAddress(transactionInfo.from);
   } else {
     throw "Invalid feed type: " + feedType;
   }
 
-  const stateInfo = await ribbit.getFeedStateInfo(transactionInfo.hash);
+  const stateInfo = await publicate.getFeedStateInfo(transactionInfo.hash);
 
   const feedInfo: FeedInfo = {
     summary,

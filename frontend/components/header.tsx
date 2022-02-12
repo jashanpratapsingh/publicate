@@ -3,7 +3,7 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import { I18n } from "react-i18next";
 
-import { Ribbit } from "../lib/ribbit";
+import { Publicate } from "../lib/publicate";
 import hashHistory from "../lib/history";
 import i18n from "../i18n/i18n";
 
@@ -15,7 +15,7 @@ export enum Page {
 }
 
 interface Props {
-  ribbit: Ribbit;
+  publicate: Publicate;
   page?: Page;
   showBackBtn?: boolean;
 }
@@ -37,16 +37,16 @@ export default class Header extends Component<Props, State> {
     if (!searchValue.length) {
       return;
     }
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (event.which === 13) {
       // enter key
-      if (ribbit.web3.utils.isAddress(searchValue)) {
+      if (publicate.web3.utils.isAddress(searchValue)) {
         // search for user
-        const username = await ribbit.getUsernameFromAddress(searchValue);
+        const username = await publicate.getUsernameFromAddress(searchValue);
         if (username && username.length) {
           window.open(
             `${window.location.pathname}#/${
-              ribbit.networkId
+              publicate.networkId
             }/profile/${username}`,
             "_blank"
           );
@@ -63,7 +63,7 @@ export default class Header extends Component<Props, State> {
         // search for user
         window.open(
           `${window.location.pathname}#/${
-            ribbit.networkId
+            publicate.networkId
           }/profile/${searchValue.slice(1)}`,
           "_blank"
         );
@@ -71,7 +71,7 @@ export default class Header extends Component<Props, State> {
         // search for topic
         window.open(
           `${window.location.pathname}#/${
-            ribbit.networkId
+            publicate.networkId
           }/topic/${encodeURIComponent(searchValue)}`,
           "_blank"
         );
@@ -94,12 +94,12 @@ export default class Header extends Component<Props, State> {
               ) : (
                 <h1
                   onClick={() =>
-                    hashHistory.replace(`/${this.props.ribbit.networkId}/`)
+                    hashHistory.replace(`/${this.props.publicate.networkId}/`)
                   }
                 >
-                  Ribbit{" "}
+                  Publicate{" "}
                   <span className="network-name" style={{ fontSize: "0.6em" }}>
-                    ({this.props.ribbit.networkNameAbbrev})
+                    ({this.props.publicate.networkNameAbbrev})
                   </span>
                 </h1>
               )}
@@ -109,7 +109,7 @@ export default class Header extends Component<Props, State> {
                     "header-tab " +
                     (this.props.page === Page.HomePage ? "selected" : "")
                   }
-                  to={`/${this.props.ribbit.networkId}/`}
+                  to={`/${this.props.publicate.networkId}/`}
                 >
                   <i className="icon fas fa-home" />
                   <span>{t("components/header/home")}</span>
@@ -119,7 +119,7 @@ export default class Header extends Component<Props, State> {
                     "header-tab " +
                     (this.props.page === Page.TopicsPage ? "selected" : "")
                   }
-                  to={`/${this.props.ribbit.networkId}/topics`}
+                  to={`/${this.props.publicate.networkId}/topics`}
                 >
                   <i className="icon fas fa-hashtag" />
                   <span>{t("components/header/topics")}</span>
@@ -131,7 +131,7 @@ export default class Header extends Component<Props, State> {
                       ? "selected"
                       : "")
                   }
-                  to={`/${this.props.ribbit.networkId}/notifications`}
+                  to={`/${this.props.publicate.networkId}/notifications`}
                 >
                   <i className="icon fas fa-bell" />
                   <span>{t("components/header/notifications")}</span>
@@ -141,7 +141,7 @@ export default class Header extends Component<Props, State> {
                     "header-tab " +
                     (this.props.page === Page.SettingsPage ? "selected" : "")
                   }
-                  to={`/${this.props.ribbit.networkId}/settings`}
+                  to={`/${this.props.publicate.networkId}/settings`}
                 >
                   <i className="icon fas fa-cog" />
                   <span>{t("components/header/settings")}</span>

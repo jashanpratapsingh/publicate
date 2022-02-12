@@ -71,7 +71,7 @@ export interface UserInfo {
   address: string;
 }
 
-export class Ribbit {
+export class Publicate {
   /**
    * Pouchdb instance.
    */
@@ -165,12 +165,12 @@ export class Ribbit {
 
     // Initialize database
     this.transactionInfoDB = new PouchDB<TransactionInfo>(
-      "ribbit/transactionInfo"
+      "publicate/transactionInfo"
     );
     await this.transactionInfoDB["createIndex"]({
       index: { fields: ["creation", "blockNumber", "from", "tags", "hash"] },
     });
-    this.blockDB = new PouchDB<BlockSchema>("ribbit/block");
+    this.blockDB = new PouchDB<BlockSchema>("publicate/block");
     await this.blockDB["createIndex"]({
       index: { fields: ["blockNumber", "fullySynced"] },
     });
@@ -518,7 +518,7 @@ export class Ribbit {
     // 2. Analyze tags
     //    If the parentTransaction is the original `post` method, then add its tags.
     // TODO: Need discussion of the tags.
-    //       https://github.com/shd101wyy/ribbit/issues/4
+    //       https://github.com/shd101wyy/publicate/issues/4
     let tags = [];
     if (decodedInputData.name === "post") {
       tags = decodedInputData.params["tags"].value;
@@ -590,7 +590,7 @@ export class Ribbit {
   }
 
   /**
-   * Sync one block, store all ribbit related transaction information into database.
+   * Sync one block, store all publicate related transaction information into database.
    * TODO: fetch IPFS messages.
    * @param blockNumber
    */
@@ -714,7 +714,7 @@ export class Ribbit {
       blockNumber = 0,
       transactionHash = "",
       maxCreation = 0,
-      // TODO: there might be multiple ribbit transaction in one block,
+      // TODO: there might be multiple publicate transaction in one block,
       //       we need to sort them by timestamp.
       // timestamp => timestamp in transaction should be greater than this.
     },
@@ -1043,7 +1043,7 @@ export class Ribbit {
     const address = userInfoCopy["address"];
     delete userInfoCopy["address"]; // no need to save address.
     const username = userInfoCopy["username"];
-    // delete userInfoCopy["username"]; // no need to delete this, because user might want @Ribbit instead of @ribbit.
+    // delete userInfoCopy["username"]; // no need to delete this, because user might want @Publicate instead of @publicate.
     if (
       this.formatUsername(this.userInfo.username) ===
       this.formatUsername(userInfo.username)
@@ -1210,7 +1210,7 @@ export class Ribbit {
   public initializeDefaultSettings(): Settings {
     const followingTopics = [
       {
-        topic: "ribbit",
+        topic: "publicate",
         timestamp: Date.now(),
       },
     ];
@@ -1221,9 +1221,9 @@ export class Ribbit {
       },
     ];
     /*
-    if (this.userInfo.username !== "ribbit") {
+    if (this.userInfo.username !== "publicate") {
       followingUsernames.push({
-        username: "ribbit",
+        username: "publicate",
         timestamp: Date.now()
       });
     }
@@ -1231,7 +1231,7 @@ export class Ribbit {
 
     this.settings = {
       postAsIPFSHash: false,
-      postToRibbitTopic: true,
+      postToPublicateTopic: true,
       followingUsernames,
       followingTopics,
       language: "en",

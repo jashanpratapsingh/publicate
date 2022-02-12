@@ -1,12 +1,12 @@
 import * as React from "react";
 import { I18n } from "react-i18next";
-import { UserInfo, Ribbit } from "../lib/ribbit";
+import { UserInfo, Publicate } from "../lib/publicate";
 import { renderMarkdown } from "../lib/markdown";
 import { generateSummaryFromHTML } from "../lib/feed";
 
 interface Props {
   userInfo: UserInfo;
-  ribbit: Ribbit;
+  publicate: Publicate;
   hideFollowingBtn?: boolean;
 }
 interface State {
@@ -44,7 +44,7 @@ export default class ProfileCard extends React.Component<Props, State> {
       return;
     }
     const username = userInfo.username;
-    const followingUsernames = this.props.ribbit.settings.followingUsernames;
+    const followingUsernames = this.props.publicate.settings.followingUsernames;
     const following = !!followingUsernames.filter(x => x.username === username)
       .length;
     this.setState(
@@ -60,7 +60,7 @@ export default class ProfileCard extends React.Component<Props, State> {
   async initBio() {
     const summary = await generateSummaryFromHTML(
       renderMarkdown(this.props.userInfo.bio),
-      this.props.ribbit
+      this.props.publicate
     );
     this.setState({
       bio: summary.html
@@ -68,7 +68,7 @@ export default class ProfileCard extends React.Component<Props, State> {
   }
 
   unfollowUser = () => {
-    this.props.ribbit
+    this.props.publicate
       .unfollowUser(this.props.userInfo.username)
       .then(() => {
         this.setState({
@@ -85,7 +85,7 @@ export default class ProfileCard extends React.Component<Props, State> {
   };
 
   followUser = () => {
-    this.props.ribbit
+    this.props.publicate
       .followUser(this.props.userInfo.username)
       .then(() => {
         this.setState({
@@ -103,7 +103,7 @@ export default class ProfileCard extends React.Component<Props, State> {
 
   render() {
     const userInfo = this.props.userInfo;
-    const ribbit = this.props.ribbit;
+    const publicate = this.props.publicate;
     if (!userInfo) return null;
     return (
       <I18n>
@@ -126,7 +126,7 @@ export default class ProfileCard extends React.Component<Props, State> {
               <p className="username">@{userInfo.username}</p>
             </div>
             {this.props.hideFollowingBtn ||
-            this.props.ribbit.userInfo.username ===
+            this.props.publicate.userInfo.username ===
               this.props.userInfo.username ? null : (
               <div className="button-group">
                 {this.state.following ? (
