@@ -188,13 +188,12 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
             </p>
             <div className="form">
               <div className="entry">
-                <p className="entry-title">Language/语言:</p>
+                <p className="entry-title">Language:</p>
                 <select
                   value={this.state.lang}
                   onChange={this.handleLanguageChange}
                 >
                   <option value="en"> English </option>
-                  <option value="zh"> 简体中文 </option>
                 </select>
               </div>
               <div className="entry">

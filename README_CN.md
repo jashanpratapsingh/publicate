@@ -1,4 +1,4 @@
-# ribbit
+# publicate
 
 > 推荐在 **Ropsten 测试网络** 上使用该项目。
 
@@ -10,8 +10,8 @@ An experimental, decentralized social media web application based on Ethereum pl
 
 示例：
 
-* ribbit：http://shd101wyy.github.io/ribbit/
-* `#{ribbit}` 话题 (Ropsten)：https://shd101wyy.github.io/ribbit/#/3/topic/ribbit
+* ribbit：http://shd101wyy.github.io/publicate/
+* `#{publicate}` 话题 (Ropsten)：https://shd101wyy.github.io/publicate/#/3/topic/publicate
 
 智能合约：
 
@@ -35,7 +35,7 @@ An experimental, decentralized social media web application based on Ethereum pl
 
 <!-- code_chunk_output -->
 
-* [ribbit](#ribbit)
+* [publicate](#publicate)
 	* [使用](#使用)
 	* [发布文字](#发布文字)
 		* [发布到话题](#发布到话题)
@@ -50,13 +50,13 @@ An experimental, decentralized social media web application based on Ethereum pl
 
 <!-- /code_chunk_output -->
 
-## 使用
+## Procedure
 
-1.  在 Chrome 浏览器中安装 [MetaMask](https://metamask.io/) 插件并启动它。根据提示完成 MetaMask 钱包账号注册。
-2.  切换至 `Ropsten 测试网络` (点击左上角 `Main Ethereum Network` 然后选择 `Ropsten Test Network` 完成网络切换)。打开一下网站并且请求测试用的以太币。请不必担心，这些都是假的以太币。
-	* http://faucet.ropsten.be:3001/ 然后点击 `request 1 ether from faucet`.
-	* https://faucet.metamask.io/ 然后点击 `Send me 1 test ether!`
-3.  访问 http://shd101wyy.github.io/ribbit/ 开始使用 ribbit。当你第一次访问 ribbit 网站是，它会要求你完成注册。请在`语言`中选择`简体中文`，然后填写完表格，接着点击 `发布个人信息到区块链` 按钮。等候几分钟直到交易结束，然后刷新你的浏览器开始使用。
+1.   Chrome  [MetaMask](https://metamask.io/) MetaMask 
+2.   `Ropsten 测试网络`  `Main Ethereum Network`  `Ropsten Test Network`
+	* http://faucet.ropsten.be:3001/ `request 1 ether from faucet`.
+	* https://faucet.metamask.io/  `Send me 1 test ether!`
+3.  http://shd101wyy.github.io/publicate/ 开始使用 ribbit。当你第一次访问 publicate
 
 ![signup2](https://user-images.githubusercontent.com/1908863/40032257-f3ad625c-57b8-11e8-93ab-4a8e8272bcb0.PNG)
 
@@ -69,7 +69,7 @@ An experimental, decentralized social media web application based on Ethereum pl
 
 要发布文字，点击绿色的 `Ribbit` 按钮。
 
-ribbit 中发布的文字是基于 Markdown 格式的。
+publicate 中发布的文字是基于 Markdown 格式的。
 这里有两种分类：
 
 * 普通
@@ -107,7 +107,7 @@ ribbit 中发布的文字是基于 Markdown 格式的。
 例如
 
 ```markdown
-你好 @{ribbit} 将会通知用户 `ribbit` 这段文字。
+你好 @{publicate} 将会通知用户 `publicate` 这段文字。
 ```
 
 ### 嵌入视频
