@@ -32,5 +32,4 @@ export interface Settings {
   /**
    * Language for Publicate web interface.
    */
-  language: string;
 }
