@@ -115,7 +115,7 @@ Start The Deployment
 To deploy this project run
 
 ```bash
-  yarn serve
+  yarn build
 ```
 
 
