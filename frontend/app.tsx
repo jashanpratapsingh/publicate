@@ -66,8 +66,6 @@ class App extends React.Component<Props, State> {
     try {
       await publicate.initialize();
       console.log("user initialized.", publicate.accountAddress);
-      console.log("user language: ", publicate.settings.language);
-      i18n.changeLanguage(publicate.settings.language || "en");
       this.setState(
         {
           injectWeb3: true,

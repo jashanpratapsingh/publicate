@@ -5,7 +5,6 @@ import {
   getABIArray,
 } from "./smartcontract";
 import { sha256 } from "js-sha256";
-import * as chineseConv from "chinese-conv";
 import * as multihash from "../lib/multihash";
 import {
   compressString,
@@ -304,8 +303,6 @@ export class Publicate {
       return tag.toLowerCase();
     }
 
-    tag = chineseConv.sify(tag); // convert to simplified Chinese.
-    return "0x" + sha256(tag.toLowerCase().replace(IgnoredCharacters, ""));
 
     /*
     const compressedTag = compressString(tag.toLowerCase().replace(/\s/g, ""));
@@ -1234,7 +1231,6 @@ export class Publicate {
       postToPublicateTopic: true,
       followingUsernames,
       followingTopics,
-      language: "en",
     };
     return this.settings;
   }

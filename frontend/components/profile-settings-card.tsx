@@ -59,7 +59,6 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
             : userInfo.avatar,
           cover: userInfo.cover || "https://tinyurl.com/ycozeccn",
           bio: userInfo.bio || "#{publicate}, #{publicate}, #{publicate}…",
-          lang: publicate.settings.language
         });
       })
       .catch(error => {
@@ -136,7 +135,6 @@ export default class ProfileSettingsCard extends React.Component<Props, State> {
       },
       () => {
         const publicate = this.props.publicate;
-        publicate.settings.language = lang;
         publicate.setSettings(publicate.settings);
         i18n.changeLanguage(lang);
       }
